@@ -35,3 +35,51 @@ if not cap.isOpened():
     print("Error: Could not open webcam.")
     exit()
 ```
+
+## Step 4: Capture Frames, Convert to Grayscale and Detect Faces
+
+Now it will continuously captures frames from the webcam. Each frame is converted to grayscale as face detection algorithms perform better on grayscale images. Then the Haar Cascade Classifier is applied to detect faces.
+
+* gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY): Converts captured color frame (BGR) into grayscale for easier face detection.
+* faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)): Detects faces in the grayscale image by adjusting size, filtering false positives and setting the minimum face size.
+
+```python 
+while True:
+    ret, frame = cap.read()  
+    if not ret:
+        print("Error: Could not read frame.")
+        break
+
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))  # Detect faces
+```
+## Step 5: Draw Rectangles Around Detected Faces and Display the Frame
+
+For each face detected a green rectangle is drawn around it and frame with rectangles is displayed in a window titled "Face Detection"
+
+```python
+for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) 
+
+    cv2.imshow('Face Detection', frame)
+```
+## Step 6: Exit the Program
+
+* if cv2.waitKey(1) & 0xFF == ord('q'): Checks if the 'q' key is pressed to exit the loop and stop the face detection process.
+
+```python
+if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+```
+
+## Step 7: Release the Webcam and Close All Windows
+
+When 'q' is pressed then webcam is released and any OpenCV windows are closed.
+
+```python
+cap.release()
+cv2.destroyAllWindows()
+```
+* Using OpenCV's Haar Cascade Classifier this method provides a solid starting point for exploring real-time face detection and other computer vision projects.
+
+Note : Above code will not run on online IDE. It will work on local system only.
